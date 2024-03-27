@@ -1,5 +1,30 @@
 # MSCKF\_VIO
 
+## 0. Reproducible Package
+Prerequisites:
+* [Docker](https://docs.docker.com/engine/install/ubuntu/)
+* [NVIDIA-Docker](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html)
+* [OSRF-Rocker](https://github.com/osrf/rocker)
+
+Please download the rosbag files from this [link](http://robotics.ethz.ch/~asl-datasets/ijrr_euroc_mav_dataset/vicon_room1/).
+
+**Terminal 1:**
+```
+rocker --env ROS_MASTER_URI=http://172.17.0.2:11311 \
+       --env ROS_IP=172.17.0.2 \
+       --nvidia --x11 \
+       ghcr.io/robotresearchrepos/kumarrobotics_msckf_vio:master \
+       roslaunch msckf_vio msckf_vio_euroc.launch
+```
+
+**Terminal 2:**
+```
+docker run --rm -it --volume .:/bags \
+           --env ROS_MASTER_URI=http://172.17.0.2:11311 \
+           --env ROS_IP=172.17.0.3 \
+           ros:noetic-ros-core \
+           rosbag play /bags/V1_01_easy.bag
+```
 
 The `MSCKF_VIO` package is a stereo version of MSCKF. The software takes in synchronized stereo images and IMU messages and generates real-time 6DOF pose estimation of the IMU frame.
 
